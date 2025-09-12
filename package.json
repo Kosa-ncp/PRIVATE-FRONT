@@ -10,11 +10,15 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.87.4",
+    "@tanstack/react-query-devtools": "^5.87.4",
     "lucide-react": "^0.543.0",
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "recharts": "^3.2.0"
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.2.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -28,8 +32,14 @@
     "eslint-config-next": "15.5.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "msw": "^2.11.2",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

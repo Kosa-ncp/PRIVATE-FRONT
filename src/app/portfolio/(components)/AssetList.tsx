@@ -4,13 +4,15 @@ import { getPortfolioListTypes } from "../../../../utils/utilsTypes";
 
 interface AssetListProps {
   assets: getPortfolioListTypes["data"];
+  handleDeleteAsset: (id: string) => void;
+  handleEditAsset: (id: string) => void;
 }
 
-const AssetList = ({ assets }: AssetListProps) => {
-  const handleDeleteAsset = (id: string) => {
-    console.log("hello", id);
-  };
-
+const AssetList = ({
+  assets,
+  handleDeleteAsset,
+  handleEditAsset,
+}: AssetListProps) => {
   return (
     <tbody>
       {assets.map((asset) => {
@@ -44,7 +46,9 @@ const AssetList = ({ assets }: AssetListProps) => {
             </td>
             <td className="py-3 px-4 text-center">
               <div className="flex justify-center space-x-2">
-                <button className="text-blue-400 hover:text-blue-300">
+                <button
+                  onClick={() => handleEditAsset(asset.assetId)}
+                  className="text-blue-400 hover:text-blue-300">
                   <Edit className="w-4 h-4" />
                 </button>
                 <button

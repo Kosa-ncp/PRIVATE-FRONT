@@ -114,6 +114,20 @@ const Page = () => {
     }));
   };
 
+  const handleAddAsset = () => {
+    handleModal("ADD_PORTFOLIO");
+  };
+
+  const handleDeleteAsset = (id: string) => {
+    handleModal("DELETE_CONFIRM");
+    console.log("hello", id);
+  };
+
+  const handleEditAsset = (id: string) => {
+    handleModal("EDIT_PORTFOLIO");
+    console.log("hello", id);
+  };
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -154,7 +168,7 @@ const Page = () => {
           <div className="flex justify-between gap-4">
             <button
               className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2"
-              onClick={() => handleModal("ADD_PORTFOLIO")}>
+              onClick={handleAddAsset}>
               <Plus className="w-4 h-4" />
               <span>추가하기</span>
             </button>
@@ -178,7 +192,11 @@ const Page = () => {
                 <th className="text-center py-3 px-4 text-gray-300">관리</th>
               </tr>
             </thead>
-            <AssetList assets={mockData.data} />
+            <AssetList
+              assets={mockData.data}
+              handleDeleteAsset={handleDeleteAsset}
+              handleEditAsset={handleEditAsset}
+            />
           </table>
         </div>
       </div>

@@ -25,6 +25,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-svg {
+svg,
+path {
   outline: none;
 }

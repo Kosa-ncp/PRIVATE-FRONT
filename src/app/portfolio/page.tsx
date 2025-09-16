@@ -1,14 +1,17 @@
 "use client";
 
-import { Download } from "lucide-react";
-import React from "react";
+import { Download, Plus } from "lucide-react";
+import React, { useState } from "react";
 import ChartConatainer from "./(components)/ChartConatainer";
 import { getPortfolioListTypes } from "../../../utils/utilsTypes";
+import AssetList from "./(components)/AssetList";
+import ModalManager, { currentModal } from "./(components)/ModalManager";
 
 const mockData: getPortfolioListTypes = {
   status: "success",
   data: [
     {
+      assetId: "KR001",
       assetName: "삼성전자",
       assetType: "국내주식",
       quantity: 50,
@@ -19,6 +22,7 @@ const mockData: getPortfolioListTypes = {
       profitRate: 6.94,
     },
     {
+      assetId: "US001",
       assetName: "Apple Inc",
       assetType: "해외주식",
       quantity: 10,
@@ -29,16 +33,7 @@ const mockData: getPortfolioListTypes = {
       profitRate: 14.0,
     },
     {
-      assetName: "강남 오피스텔",
-      assetType: "부동산",
-      quantity: 1,
-      marketValue: 520000000,
-      averagePrice: 500000000,
-      principal: 500000000,
-      profit: 20000000,
-      profitRate: 4.0,
-    },
-    {
+      assetId: "CR001",
       assetName: "비트코인",
       assetType: "가상자산",
       quantity: 0.5,
@@ -49,6 +44,7 @@ const mockData: getPortfolioListTypes = {
       profitRate: 12.5,
     },
     {
+      assetId: "SA001",
       assetName: "KB국민은행 정기예금",
       assetType: "예적금",
       quantity: 1,
@@ -58,10 +54,26 @@ const mockData: getPortfolioListTypes = {
       profit: 500000,
       profitRate: 5.0,
     },
+    {
+      assetId: "CA001",
+      assetName: "원화 현금",
+      assetType: "현금",
+      quantity: 1,
+      marketValue: 5000000,
+      averagePrice: 5000000,
+      principal: 5000000,
+      profit: 0,
+      profitRate: 0.0,
+    },
   ],
 };
 
 const Page = () => {
+  const [modalData, setModalData] = useState<{
+    isOpen: boolean;
+    currentModal: currentModal;
+  }>({ isOpen: false, currentModal: "" });
+
   const calculatePortfolioData = () => {
     const typeGroups = mockData.data.reduce(
       (acc: Record<string, number>, asset) => {
@@ -93,6 +105,14 @@ const Page = () => {
   };
 
   const portfolioData = calculatePortfolioData();
+
+  const handleModal = (target: currentModal) => {
+    setModalData((prev) => ({
+      ...prev,
+      isOpen: !prev.isOpen,
+      currentModal: target,
+    }));
+  };
 
   return (
     <div className="space-y-8">
@@ -128,14 +148,21 @@ const Page = () => {
         </div>
       </div>
 
-      {/* 개별 자산 목록 */}
       <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-white">보유 자산 목록</h3>
-          <button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
-            <Download className="w-4 h-4" />
-            <span>내보내기</span>
-          </button>
+          <div className="flex justify-between gap-4">
+            <button
+              className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2"
+              onClick={() => handleModal("ADD_PORTFOLIO")}>
+              <Plus className="w-4 h-4" />
+              <span>추가하기</span>
+            </button>
+            <button className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
+              <Download className="w-4 h-4" />
+              <span>내보내기</span>
+            </button>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -151,56 +178,14 @@ const Page = () => {
                 <th className="text-center py-3 px-4 text-gray-300">관리</th>
               </tr>
             </thead>
-            {/* <tbody>
-              {assets.map((asset) => {
-                const profit = asset.currentValue - asset.purchasePrice;
-                const returnRate = (
-                  (profit / asset.purchasePrice) *
-                  100
-                ).toFixed(1);
-
-                return (
-                  <tr
-                    key={asset.id}
-                    className="border-b border-gray-700 hover:bg-gray-750">
-                    <td className="py-3 px-4 text-white font-medium">
-                      {asset.name}
-                    </td>
-                    <td className="py-3 px-4 text-gray-300">{asset.type}</td>
-                    <td className="py-3 px-4 text-right text-white">
-                      ₩{asset.currentValue.toLocaleString()}
-                    </td>
-                    <td className="py-3 px-4 text-right text-gray-300">
-                      ₩{asset.purchasePrice.toLocaleString()}
-                    </td>
-                    <td
-                      className={`py-3 px-4 text-right font-medium ${profit >= 0 ? "text-green-400" : "text-red-400"}`}>
-                      {profit >= 0 ? "+" : ""}₩{profit.toLocaleString()}
-                    </td>
-                    <td
-                      className={`py-3 px-4 text-right font-medium ${returnRate >= 0 ? "text-green-400" : "text-red-400"}`}>
-                      {returnRate >= 0 ? "+" : ""}
-                      {returnRate}%
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <div className="flex justify-center space-x-2">
-                        <button className="text-blue-400 hover:text-blue-300">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteAsset(asset.id)}
-                          className="text-red-400 hover:text-red-300">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody> */}
+            <AssetList assets={mockData.data} />
           </table>
         </div>
       </div>
+      <ModalManager
+        onToggleModal={() => handleModal("")}
+        currentModal={modalData.currentModal}
+      />
     </div>
   );
 };

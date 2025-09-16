@@ -1,4 +1,4 @@
-import { Bell, Settings, Shield, User } from "lucide-react";
+import { Shield } from "lucide-react";
 import React from "react";
 
 const Header = () => {
@@ -14,11 +14,6 @@ const Header = () => {
             <span className="text-sm text-gray-400 bg-gray-700 px-2 py-1 rounded-full">
               AI 포트폴리오 관리
             </span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Bell className="w-5 h-5 text-gray-400 cursor-pointer hover:text-white" />
-            <Settings className="w-5 h-5 text-gray-400 cursor-pointer hover:text-white" />
-            <User className="w-5 h-5 text-gray-400 cursor-pointer hover:text-white" />
           </div>
         </div>
       </div>

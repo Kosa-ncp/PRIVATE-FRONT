@@ -1,6 +1,6 @@
 import React from "react";
 import DashbaordCard from "./DashbaordCard";
-import { DollarSign } from "lucide-react";
+import { DollarSign, BarChart3, Target } from "lucide-react";
 import { getDashboardListTypes } from "../../../../utils/utilsTypes";
 
 interface DashboardCardContainerProps {
@@ -21,19 +21,19 @@ const DashboardCardContainer = ({ items }: DashboardCardContainerProps) => {
           asset={items.data.investmentPrincipal}
           title="투자 원금"
           description="누적 투자금"
-          Icons={DollarSign}
+          Icons={BarChart3}
         />
         <DashbaordCard
           asset={items.data.profitAndLoss}
           title="평가 손익"
           description="총 손익"
-          Icons={DollarSign}
+          Icons={Target}
         />
         <DashbaordCard
           asset={items.data.assetsCount}
           title="보유 자산"
           description="다각화 자산"
-          Icons={DollarSign}
+          Icons={Target}
         />
       </div>
     </div>

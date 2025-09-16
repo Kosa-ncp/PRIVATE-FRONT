@@ -53,10 +53,10 @@ const ChartConatainer = ({ data }: getPortfolioListProps) => {
         </Pie>
         <Tooltip
           contentStyle={{
-            backgroundColor: "#374151",
-            border: "1px solid #6B7280",
+            backgroundColor: "#FFFFFF",
             borderRadius: "8px",
-            color: "white",
+            color: "#000000",
+            fontSize: "12px",
           }}
           formatter={(value, name) => [`${value}%`, name]}
         />

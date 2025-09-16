@@ -1,0 +1,64 @@
+import { Edit, Trash2 } from "lucide-react";
+import React from "react";
+import { getPortfolioListTypes } from "../../../../utils/utilsTypes";
+
+interface AssetListProps {
+  assets: getPortfolioListTypes["data"];
+}
+
+const AssetList = ({ assets }: AssetListProps) => {
+  const handleDeleteAsset = (id: string) => {
+    console.log("hello", id);
+  };
+
+  return (
+    <tbody>
+      {assets.map((asset) => {
+        const profit = asset.marketValue - asset.averagePrice * asset.quantity;
+        const returnRate = parseFloat(
+          ((profit / (asset.averagePrice * asset.quantity)) * 100).toFixed(1)
+        );
+
+        return (
+          <tr
+            key={asset.assetId}
+            className="border-b border-gray-700 hover:bg-gray-750">
+            <td className="py-3 px-4 text-white font-medium">
+              {asset.assetName}
+            </td>
+            <td className="py-3 px-4 text-gray-300">{asset.assetType}</td>
+            <td className="py-3 px-4 text-right text-white">
+              ₩{asset.marketValue.toLocaleString()}
+            </td>
+            <td className="py-3 px-4 text-right text-gray-300">
+              ₩{(asset.averagePrice * asset.quantity).toLocaleString()}
+            </td>
+            <td
+              className={`py-3 px-4 text-right font-medium ${profit >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {profit >= 0 ? "+" : ""}₩{profit.toLocaleString()}
+            </td>
+            <td
+              className={`py-3 px-4 text-right font-medium ${returnRate >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {returnRate >= 0 ? "+" : ""}
+              {returnRate}%
+            </td>
+            <td className="py-3 px-4 text-center">
+              <div className="flex justify-center space-x-2">
+                <button className="text-blue-400 hover:text-blue-300">
+                  <Edit className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDeleteAsset(asset.assetId)}
+                  className="text-red-400 hover:text-red-300">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  );
+};
+
+export default AssetList;

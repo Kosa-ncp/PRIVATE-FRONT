@@ -25,6 +25,7 @@ export interface getDashboardListTypes {
 export interface getPortfolioListTypes {
   status: string;
   data: {
+    assetId: string;
     assetName: string;
     assetType: string;
     quantity: number;

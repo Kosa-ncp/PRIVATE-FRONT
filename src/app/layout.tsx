@@ -4,7 +4,6 @@ import "./globals.css";
 import Header from "./(components)/Header";
 import Navigatation from "./(components)/Navigatation";
 import ReactQueryProvider from "../../providers/ReactQueryProvider";
-import MSWProvider from "../../providers/MSWProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,17 +29,15 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <MSWProvider>
-          <ReactQueryProvider>
-            <div className="min-h-screen bg-gray-900 text-white">
-              <Header />
-              <Navigatation />
-              <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {children}
-              </main>
-            </div>
-          </ReactQueryProvider>
-        </MSWProvider>
+        <ReactQueryProvider>
+          <div className="min-h-screen bg-gray-900 text-white">
+            <Header />
+            <Navigatation />
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              {children}
+            </main>
+          </div>
+        </ReactQueryProvider>
       </body>
     </html>
   );

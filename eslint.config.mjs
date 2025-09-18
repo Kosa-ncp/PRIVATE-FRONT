@@ -25,6 +25,12 @@ const eslintConfig = [
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
+      "import/no-anonymous-default-export": [
+        "error",
+        {
+          allowObject: true,
+        },
+      ],
     },
   },
 ];

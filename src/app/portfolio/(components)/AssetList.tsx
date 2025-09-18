@@ -16,11 +16,6 @@ const AssetList = ({
   return (
     <tbody>
       {assets.map((asset) => {
-        const profit = asset.marketValue - asset.averagePrice * asset.quantity;
-        const returnRate = parseFloat(
-          ((profit / (asset.averagePrice * asset.quantity)) * 100).toFixed(1)
-        );
-
         return (
           <tr
             key={asset.assetId}
@@ -30,19 +25,26 @@ const AssetList = ({
             </td>
             <td className="py-3 px-4 text-gray-300">{asset.assetType}</td>
             <td className="py-3 px-4 text-right text-white">
-              ₩{asset.marketValue.toLocaleString()}
+              ₩{asset.valuation.toLocaleString()}
+            </td>
+            <td className="py-3 px-4 text-right text-white">
+              ₩{asset.averagePrice.toLocaleString()}
+            </td>
+            <td className="py-3 px-4 text-right text-white">
+              {asset.quantity.toLocaleString()}
             </td>
             <td className="py-3 px-4 text-right text-gray-300">
               ₩{(asset.averagePrice * asset.quantity).toLocaleString()}
             </td>
             <td
-              className={`py-3 px-4 text-right font-medium ${profit >= 0 ? "text-green-400" : "text-red-400"}`}>
-              {profit >= 0 ? "+" : ""}₩{profit.toLocaleString()}
+              className={`py-3 px-4 text-right font-medium ${asset.profit >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {asset.profit >= 0 ? "+" : "-"}₩
+              {Math.abs(asset.profit).toLocaleString()}
             </td>
             <td
-              className={`py-3 px-4 text-right font-medium ${returnRate >= 0 ? "text-green-400" : "text-red-400"}`}>
-              {returnRate >= 0 ? "+" : ""}
-              {returnRate}%
+              className={`py-3 px-4 text-right font-medium ${asset.profitRate >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {asset.profitRate >= 0 ? "+" : ""}
+              {asset.profitRate}%
             </td>
             <td className="py-3 px-4 text-center">
               <div className="flex justify-center space-x-2">

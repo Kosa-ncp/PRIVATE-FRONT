@@ -1,8 +1,9 @@
-// components/ModalManager.tsx
 "use client";
 
 import Modal from "@/app/(components)/Modal";
 import AddAssetForm from "./AddAssetForm";
+import EditAssetForm from "./EditAssetForm";
+import DeleteAssetForm from "./DeleteAssetForm";
 
 export type currentModal =
   | ""
@@ -34,14 +35,14 @@ const ModalManager = ({ currentModal, onToggleModal }: ModalManagerProps) => {
             isOpen={true}
             onToggleModal={onToggleModal}
             title="포트폴리오 수정">
-            <div>Edit</div>
+            <EditAssetForm />
           </Modal>
         );
 
       case "DELETE_CONFIRM":
         return (
           <Modal isOpen={true} onToggleModal={onToggleModal} title="삭제 확인">
-            <div>Delete</div>
+            <DeleteAssetForm />
           </Modal>
         );
 

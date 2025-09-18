@@ -18,8 +18,6 @@ const ResetButton = ({ setAssetForm }: ResetButtonProps) => {
             quantity: null,
             annualInterestRate: null,
             principalPrice: null,
-            openDate: "",
-            maturityDate: "",
           };
         })
       }

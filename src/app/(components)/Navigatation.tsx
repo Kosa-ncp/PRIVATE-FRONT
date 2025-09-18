@@ -24,7 +24,8 @@ const Navigatation = () => {
                 pathname === `/${tab.id}`
                   ? "border-purple-500 text-purple-400"
                   : "border-transparent text-gray-400 hover:text-white hover:border-gray-300"
-              }`}>
+              }`}
+              scroll={false}>
               <tab.icon className="w-4 h-4" /> {tab.name}
             </Link>
           ))}

@@ -1,27 +1,32 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { useAssetStore } from "../../../../stores/asserStore";
+import { useAsset } from "../../../../hooks/useAsset";
 import { Plus, Shield } from "lucide-react";
-import { useState } from "react";
-import ResetButton from "./ResetButton";
 import LiquidAsset from "./LiquidAsset";
 import CashAsset from "./CashAsset";
+import ResetButton from "./ResetButton";
 
-export interface AssetFormData {
+export interface AssetEditFormData {
   assetType: string;
-  averagePrice: number;
+  averagePrice?: number;
   assetName: string;
-  quantity: number;
-  principalPrice: number;
+  quantity?: number;
+  principalPrice?: number;
 }
 
-const AddAssetForm = () => {
-  const [assetForm, setAssetForm] = useState<AssetFormData>({
-    assetType: "국내주식",
-    averagePrice: null,
-    assetName: "",
-    quantity: null,
-    principalPrice: null,
+const EditAssetForm = () => {
+  const { selectedAssetId } = useAssetStore();
+  const { data } = useAsset(selectedAssetId);
+  const [assets, setAssetForm] = useState<AssetEditFormData>({
+    assetType: data.assetType,
+    assetName: data.assetName,
   });
+
+  useEffect(() => {
+    setAssetForm(assets);
+  }, [assets, data]);
 
   return (
     <div className="space-y-6">
@@ -37,7 +42,7 @@ const AddAssetForm = () => {
               자산 유형 *
             </label>
             <select
-              value={assetForm.assetType}
+              value={assets.assetType}
               onChange={(e) =>
                 setAssetForm((prev) => ({
                   ...prev,
@@ -52,14 +57,14 @@ const AddAssetForm = () => {
               <option>현금</option>
             </select>
           </div>
-          {assetForm.assetType === "국내주식" ||
-          assetForm.assetType === "해외주식" ||
-          assetForm.assetType === "가상자산" ? (
-            <LiquidAsset assetForm={assetForm} setAssetForm={setAssetForm} />
+          {assets.assetType === "국내주식" ||
+          assets.assetType === "해외주식" ||
+          assets.assetType === "가상자산" ? (
+            <LiquidAsset assetForm={assets} setAssetForm={setAssetForm} />
           ) : (
             <CashAsset
-              isDisable={assetForm.assetType === "현금"}
-              assetForm={assetForm}
+              isDisable={assets.assetType === "현금"}
+              assetForm={assets}
               setAssetForm={setAssetForm}
             />
           )}
@@ -89,4 +94,4 @@ const AddAssetForm = () => {
   );
 };
 
-export default AddAssetForm;
+export default EditAssetForm;

@@ -40,9 +40,9 @@ const LiquidAsset = ({ assetForm, setAssetForm }: LiquidAssetsProps) => {
       <AddAssetItem
         title="매입 원가 *"
         type="number"
-        target="purchasePrice"
+        target="principalPrice"
         setAssetForm={setAssetForm}
-        value={assetForm.purchasePrice}
+        value={assetForm.principalPrice}
         placeholder="원"
         disabled
       />

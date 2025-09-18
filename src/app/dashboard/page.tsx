@@ -28,7 +28,7 @@ const Page = () => {
     <>
       {data ? (
         <div className="space-y-8">
-          <DashboardCardContainer items={data} />
+          <DashboardCardContainer item={data.data} />
           <ChartConatainer assetType={data.data.assetType} />
           <ReportContainer
             title="일일 리포트"

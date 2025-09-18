@@ -3,70 +3,11 @@
 import { Download, Plus } from "lucide-react";
 import React, { useState } from "react";
 import ChartConatainer from "./(components)/ChartConatainer";
-import { getPortfolioListTypes } from "../../../utils/utilsTypes";
 import AssetList from "./(components)/AssetList";
 import ModalManager, { currentModal } from "./(components)/ModalManager";
-
-const mockData: getPortfolioListTypes = {
-  status: "success",
-  data: [
-    {
-      assetId: "KR001",
-      assetName: "삼성전자",
-      assetType: "국내주식",
-      quantity: 50,
-      marketValue: 3850000,
-      averagePrice: 72000,
-      principal: 3600000,
-      profit: 250000,
-      profitRate: 6.94,
-    },
-    {
-      assetId: "US001",
-      assetName: "Apple Inc",
-      assetType: "해외주식",
-      quantity: 10,
-      marketValue: 2280000,
-      averagePrice: 200000,
-      principal: 2000000,
-      profit: 280000,
-      profitRate: 14.0,
-    },
-    {
-      assetId: "CR001",
-      assetName: "비트코인",
-      assetType: "가상자산",
-      quantity: 0.5,
-      marketValue: 45000000,
-      averagePrice: 80000000,
-      principal: 40000000,
-      profit: 5000000,
-      profitRate: 12.5,
-    },
-    {
-      assetId: "SA001",
-      assetName: "KB국민은행 정기예금",
-      assetType: "예적금",
-      quantity: 1,
-      marketValue: 10500000,
-      averagePrice: 10000000,
-      principal: 10000000,
-      profit: 500000,
-      profitRate: 5.0,
-    },
-    {
-      assetId: "CA001",
-      assetName: "원화 현금",
-      assetType: "현금",
-      quantity: 1,
-      marketValue: 5000000,
-      averagePrice: 5000000,
-      principal: 5000000,
-      profit: 0,
-      profitRate: 0.0,
-    },
-  ],
-};
+import { useGetPortfolio } from "../../../hooks/useGetPortfolio";
+import LoadingSpinner from "../dashboard/(components)/LoadingSpinner";
+import { useAssetStore } from "../../../stores/asserStore";
 
 const Page = () => {
   const [modalData, setModalData] = useState<{
@@ -74,11 +15,36 @@ const Page = () => {
     currentModal: currentModal;
   }>({ isOpen: false, currentModal: "" });
 
+  const { data, isLoading } = useGetPortfolio();
+  const { setSelectedAssetId } = useAssetStore();
+
+  const handleModal = (target: currentModal) => {
+    setModalData((prev) => ({
+      ...prev,
+      isOpen: !prev.isOpen,
+      currentModal: target,
+    }));
+  };
+
+  const handleAddAsset = () => {
+    handleModal("ADD_PORTFOLIO");
+  };
+
+  const handleDeleteAsset = (id: string) => {
+    handleModal("DELETE_CONFIRM");
+    console.log("hello", id);
+  };
+
+  const handleEditAsset = (id: string) => {
+    handleModal("EDIT_PORTFOLIO");
+    setSelectedAssetId(id);
+  };
+
   const calculatePortfolioData = () => {
-    const typeGroups = mockData.data.reduce(
+    const typeGroups = data.reduce(
       (acc: Record<string, number>, asset) => {
         if (!acc[asset.assetType]) acc[asset.assetType] = 0;
-        acc[asset.assetType] += asset.marketValue;
+        acc[asset.assetType] += asset.currentPrice;
         return acc;
       },
       {} as Record<string, number>
@@ -106,27 +72,37 @@ const Page = () => {
 
   const portfolioData = calculatePortfolioData();
 
-  const handleModal = (target: currentModal) => {
-    setModalData((prev) => ({
-      ...prev,
-      isOpen: !prev.isOpen,
-      currentModal: target,
-    }));
+  const test = async () => {
+    const res = await fetch(
+      "https://clovastudio.stream.ntruss.com/v1/skillsets/vpcu6fpx/versions/11/final-answer",
+      {
+        method: "post",
+        headers: {
+          Authorization: "Bearer nv-8a084217fec146c7b9322a4b0db8c0a5RWrs",
+          "X-NCP-CLOVASTUDIO-REQUEST-ID": "788d4d0ad55a423785a2ed7d964cf2bc",
+          "Content-Type": "application/json",
+          Accept: "text/event-stream",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+
+    console.log(res);
   };
 
-  const handleAddAsset = () => {
-    handleModal("ADD_PORTFOLIO");
-  };
-
-  const handleDeleteAsset = (id: string) => {
-    handleModal("DELETE_CONFIRM");
-    console.log("hello", id);
-  };
-
-  const handleEditAsset = (id: string) => {
-    handleModal("EDIT_PORTFOLIO");
-    console.log("hello", id);
-  };
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+        <div className="bg-gray-800 rounded-lg p-8 shadow-2xl border border-gray-700">
+          <LoadingSpinner
+            size="lg"
+            variant="gradient"
+            text="데이터를 불러오는 중..."
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -161,7 +137,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-
+      <button onClick={test}>Test</button>
       <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-white">보유 자산 목록</h3>
@@ -186,6 +162,8 @@ const Page = () => {
                 <th className="text-left py-3 px-4 text-gray-300">자산명</th>
                 <th className="text-left py-3 px-4 text-gray-300">유형</th>
                 <th className="text-right py-3 px-4 text-gray-300">평가금액</th>
+                <th className="text-right py-3 px-4 text-gray-300">평단가</th>
+                <th className="text-right py-3 px-4 text-gray-300">수량</th>
                 <th className="text-right py-3 px-4 text-gray-300">매입금액</th>
                 <th className="text-right py-3 px-4 text-gray-300">손익</th>
                 <th className="text-right py-3 px-4 text-gray-300">수익률</th>
@@ -193,7 +171,7 @@ const Page = () => {
               </tr>
             </thead>
             <AssetList
-              assets={mockData.data}
+              assets={data}
               handleDeleteAsset={handleDeleteAsset}
               handleEditAsset={handleEditAsset}
             />

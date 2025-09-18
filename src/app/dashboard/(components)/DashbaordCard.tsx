@@ -40,7 +40,7 @@ const DashbaordCard = ({
               <div>
                 <p className="text-blue-100 text-sm font-medium">투자 원금</p>
                 <p className="text-white text-2xl font-bold">
-                  ₩{asset.toFixed(1)}만
+                  ₩{(asset / 10000).toFixed(1)}만
                 </p>
                 <p className="text-blue-100 text-xs">누적 투자금</p>
               </div>
@@ -55,8 +55,8 @@ const DashbaordCard = ({
               <div>
                 <p className="text-purple-100 text-sm font-medium">평가 손익</p>
                 <p className="text-white text-2xl font-bold">
-                  {asset >= 0 ? "+" : ""}₩{(Math.abs(asset) / 10000).toFixed(1)}
-                  만
+                  {asset >= 0 ? "+" : "-"}
+                  {(Math.abs(asset) / 10000).toFixed(1)}만 ₩
                 </p>
                 <p className="text-purple-100 text-xs">총 손익</p>
               </div>
@@ -69,7 +69,7 @@ const DashbaordCard = ({
           <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-xl shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-100 text-sm font-medium">보유 자산</p>
+                <p className="text-orange-100 text-sm font-medium">보유 종목</p>
                 <p className="text-white text-2xl font-bold">{asset}개</p>
                 <p className="text-orange-100 text-xs">다각화 자산</p>
               </div>

@@ -28,6 +28,7 @@ const AddAssetItem = ({
   ...inputProps
 }: AddAssetItemProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
     setAssetForm((prev) => ({
       ...prev,
       [target]: e.target.value,
@@ -37,7 +38,7 @@ const AddAssetItem = ({
       setAssetForm((prev) => {
         return {
           ...prev,
-          purchasePrice: prev.quantity * prev.averagePrice,
+          principalPrice: prev.quantity * prev.averagePrice,
         };
       });
     }

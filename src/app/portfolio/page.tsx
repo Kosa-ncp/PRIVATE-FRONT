@@ -32,7 +32,7 @@ const Page = () => {
 
   const handleDeleteAsset = (id: string) => {
     handleModal("DELETE_CONFIRM");
-    console.log("hello", id);
+    setSelectedAssetId(id);
   };
 
   const handleEditAsset = (id: string) => {
@@ -71,24 +71,6 @@ const Page = () => {
   };
 
   const portfolioData = calculatePortfolioData();
-
-  const test = async () => {
-    const res = await fetch(
-      "https://clovastudio.stream.ntruss.com/v1/skillsets/vpcu6fpx/versions/11/final-answer",
-      {
-        method: "post",
-        headers: {
-          Authorization: "Bearer nv-8a084217fec146c7b9322a4b0db8c0a5RWrs",
-          "X-NCP-CLOVASTUDIO-REQUEST-ID": "788d4d0ad55a423785a2ed7d964cf2bc",
-          "Content-Type": "application/json",
-          Accept: "text/event-stream",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-    );
-
-    console.log(res);
-  };
 
   if (isLoading) {
     return (
@@ -137,7 +119,6 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <button onClick={test}>Test</button>
       <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-white">보유 자산 목록</h3>
@@ -148,10 +129,10 @@ const Page = () => {
               <Plus className="w-4 h-4" />
               <span>추가하기</span>
             </button>
-            <button className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
+            {/* <button className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
               <Download className="w-4 h-4" />
               <span>내보내기</span>
-            </button>
+            </button> */}
           </div>
         </div>
 

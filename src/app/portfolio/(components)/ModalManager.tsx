@@ -25,7 +25,7 @@ const ModalManager = ({ currentModal, onToggleModal }: ModalManagerProps) => {
             isOpen={true}
             onToggleModal={onToggleModal}
             title="포트폴리오 추가">
-            <AddAssetForm />
+            <AddAssetForm onToggleModal={onToggleModal} />
           </Modal>
         );
 
@@ -35,14 +35,14 @@ const ModalManager = ({ currentModal, onToggleModal }: ModalManagerProps) => {
             isOpen={true}
             onToggleModal={onToggleModal}
             title="포트폴리오 수정">
-            <EditAssetForm />
+            <EditAssetForm onToggleModal={onToggleModal} />
           </Modal>
         );
 
       case "DELETE_CONFIRM":
         return (
           <Modal isOpen={true} onToggleModal={onToggleModal} title="삭제 확인">
-            <DeleteAssetForm />
+            <DeleteAssetForm onToggleModal={onToggleModal} />
           </Modal>
         );
 

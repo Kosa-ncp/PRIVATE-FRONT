@@ -4,25 +4,59 @@ import React, { useEffect, useState } from "react";
 import { useAssetStore } from "../../../../stores/asserStore";
 import { useAsset } from "../../../../hooks/useAsset";
 import { Plus, Shield } from "lucide-react";
-import LiquidAsset from "./LiquidAsset";
-import CashAsset from "./CashAsset";
 import ResetButton from "./ResetButton";
+import AddAssetItem from "./AddAssetItem";
 
 export interface AssetEditFormData {
   assetType: string;
-  averagePrice?: number;
+  averagePrice: number;
   assetName: string;
-  quantity?: number;
-  principalPrice?: number;
+  quantity: number;
+  principal: number;
+  orderType?: "BUY" | "SELL";
 }
 
-const EditAssetForm = () => {
+interface EditAssetFormProps {
+  onToggleModal: () => void;
+}
+
+const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
   const { selectedAssetId } = useAssetStore();
   const { data } = useAsset(selectedAssetId);
   const [assets, setAssetForm] = useState<AssetEditFormData>({
     assetType: data.assetType,
+    averagePrice: null,
     assetName: data.assetName,
+    quantity: null,
+    principal: null,
+    orderType: "BUY",
   });
+
+  const handleReset = () => {
+    setAssetForm((prev) => {
+      return {
+        assetType: prev.assetType,
+        averagePrice: null,
+        assetName: prev.assetName,
+        quantity: null,
+        principal: null,
+        orderType: prev.orderType,
+      };
+    });
+  };
+
+  const handleOrderType = (orderType: AssetEditFormData["orderType"]) => {
+    setAssetForm((prev) => {
+      return {
+        ...prev,
+        orderType,
+      };
+    });
+  };
+
+  const handleEditAsset = () => {
+    onToggleModal();
+  };
 
   useEffect(() => {
     setAssetForm(assets);
@@ -35,7 +69,18 @@ const EditAssetForm = () => {
           <Plus className="w-5 h-5 mr-2" />
           자산 정보 입력
         </h3>
-
+        <div className="flex justify-end gap-4 mb-4">
+          <button
+            className={`${assets.orderType === "BUY" ? "bg-green-600" : "bg-green-800"} hover:bg-green-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200`}
+            onClick={() => handleOrderType("BUY")}>
+            매수
+          </button>
+          <button
+            className={`${assets.orderType === "SELL" ? "bg-red-600" : "bg-red-800"} hover:bg-red-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200`}
+            onClick={() => handleOrderType("SELL")}>
+            매도
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -49,7 +94,8 @@ const EditAssetForm = () => {
                   assetType: e.target.value,
                 }))
               }
-              className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              disabled>
               <option>국내주식</option>
               <option>해외주식</option>
               <option>가상자산</option>
@@ -60,22 +106,70 @@ const EditAssetForm = () => {
           {assets.assetType === "국내주식" ||
           assets.assetType === "해외주식" ||
           assets.assetType === "가상자산" ? (
-            <LiquidAsset assetForm={assets} setAssetForm={setAssetForm} />
+            <>
+              <AddAssetItem
+                title="자산명 *"
+                type="text"
+                target="assetName"
+                setAssetForm={setAssetForm}
+                value={assets.assetName}
+                placeholder="예: 삼성전자, 애플 주식"
+                disabled
+              />
+              <AddAssetItem
+                title="매수 / 매도가 *"
+                type="number"
+                target="averagePrice"
+                setAssetForm={setAssetForm}
+                value={assets.averagePrice}
+                placeholder="원"
+              />
+              <AddAssetItem
+                title="수량 *"
+                type="number"
+                target="quantity"
+                setAssetForm={setAssetForm}
+                value={assets.quantity}
+                placeholder="개"
+              />
+              <AddAssetItem
+                title="매수 / 매도 총액 *"
+                type="number"
+                target="principal"
+                setAssetForm={setAssetForm}
+                value={assets.principal}
+                placeholder="원"
+                disabled
+              />
+            </>
           ) : (
-            <CashAsset
-              isDisable={assets.assetType === "현금"}
-              assetForm={assets}
-              setAssetForm={setAssetForm}
-            />
+            <>
+              <AddAssetItem
+                title="자산명 *"
+                type="text"
+                target="assetName"
+                setAssetForm={setAssetForm}
+                value={assets.assetName}
+                placeholder="예: 삼성전자, 애플 주식"
+              />
+              <AddAssetItem
+                title={assets.assetType === "현금" ? "현금 *" : "원금 *"}
+                type="number"
+                target="principal"
+                setAssetForm={setAssetForm}
+                value={assets.principal}
+                placeholder="원"
+              />
+            </>
           )}
         </div>
 
         <div className="mt-6 flex justify-end space-x-4">
-          <ResetButton setAssetForm={setAssetForm} />
+          <ResetButton handleReset={handleReset} />
           <button
-            // onClick={handleAddAsset}
+            onClick={handleEditAsset}
             className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 rounded-lg transition-all">
-            자산 추가
+            수정
           </button>
         </div>
       </div>

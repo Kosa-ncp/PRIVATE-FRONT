@@ -3,25 +3,48 @@
 import { Plus, Shield } from "lucide-react";
 import { useState } from "react";
 import ResetButton from "./ResetButton";
-import LiquidAsset from "./LiquidAsset";
-import CashAsset from "./CashAsset";
+import AddAssetItem from "./AddAssetItem";
+import useAddPortfolio from "../../../../hooks/useAddPortfolio";
 
 export interface AssetFormData {
   assetType: string;
   averagePrice: number;
   assetName: string;
   quantity: number;
-  principalPrice: number;
+  principal: number;
 }
 
-const AddAssetForm = () => {
+interface AddAssetFormProps {
+  onToggleModal: () => void;
+}
+
+const AddAssetForm = ({ onToggleModal }: AddAssetFormProps) => {
+  const { mutate } = useAddPortfolio();
   const [assetForm, setAssetForm] = useState<AssetFormData>({
     assetType: "국내주식",
     averagePrice: null,
     assetName: "",
     quantity: null,
-    principalPrice: null,
+    principal: null,
   });
+
+  const handleReset = () => {
+    setAssetForm((prev) => {
+      return {
+        assetType: prev.assetType,
+        averagePrice: null,
+        assetName: "",
+        quantity: null,
+        principal: null,
+      };
+    });
+  };
+
+  const handleAddAsset = () => {
+    mutate(assetForm);
+    console.log(assetForm);
+    onToggleModal();
+  };
 
   return (
     <div className="space-y-6">
@@ -30,7 +53,6 @@ const AddAssetForm = () => {
           <Plus className="w-5 h-5 mr-2" />
           자산 정보 입력
         </h3>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -55,26 +77,71 @@ const AddAssetForm = () => {
           {assetForm.assetType === "국내주식" ||
           assetForm.assetType === "해외주식" ||
           assetForm.assetType === "가상자산" ? (
-            <LiquidAsset assetForm={assetForm} setAssetForm={setAssetForm} />
+            <>
+              <AddAssetItem
+                title="자산명 *"
+                type="text"
+                target="assetName"
+                setAssetForm={setAssetForm}
+                value={assetForm.assetName}
+                placeholder="예: 삼성전자, 애플 주식"
+              />
+              <AddAssetItem
+                title="평균 단가 *"
+                type="number"
+                target="averagePrice"
+                setAssetForm={setAssetForm}
+                value={assetForm.averagePrice}
+                placeholder="원"
+              />
+              <AddAssetItem
+                title="수량 *"
+                type="number"
+                target="quantity"
+                setAssetForm={setAssetForm}
+                value={assetForm.quantity}
+                placeholder="개"
+              />
+              <AddAssetItem
+                title="매입 원가 *"
+                type="number"
+                target="principal"
+                setAssetForm={setAssetForm}
+                value={assetForm.principal}
+                placeholder="원"
+                disabled
+              />
+            </>
           ) : (
-            <CashAsset
-              isDisable={assetForm.assetType === "현금"}
-              assetForm={assetForm}
-              setAssetForm={setAssetForm}
-            />
+            <>
+              <AddAssetItem
+                title="자산명 *"
+                type="text"
+                target="assetName"
+                setAssetForm={setAssetForm}
+                value={assetForm.assetName}
+                placeholder="예: 삼성전자, 애플 주식"
+              />
+              <AddAssetItem
+                title={assetForm.assetType === "현금" ? "현금 *" : "원금 *"}
+                type="number"
+                target="principal"
+                setAssetForm={setAssetForm}
+                value={assetForm.principal}
+                placeholder="원"
+              />
+            </>
           )}
         </div>
-
         <div className="mt-6 flex justify-end space-x-4">
-          <ResetButton setAssetForm={setAssetForm} />
+          <ResetButton handleReset={handleReset} />
           <button
-            // onClick={handleAddAsset}
+            onClick={handleAddAsset}
             className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 rounded-lg transition-all">
             자산 추가
           </button>
         </div>
       </div>
-
       <div className="bg-green-900 border border-green-700 p-4 rounded-lg">
         <div className="flex items-center">
           <Shield className="w-5 h-5 text-green-400 mr-2" />

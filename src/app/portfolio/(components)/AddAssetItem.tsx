@@ -14,7 +14,7 @@ interface AddAssetItemProps extends InputHTMLAttributes<HTMLInputElement> {
     | "assetName"
     | "quantity"
     | "annualInterestRate"
-    | "principalPrice"
+    | "principal"
     | "openDate"
     | "maturityDate";
   setAssetForm: Dispatch<SetStateAction<AssetFormData>>;
@@ -28,7 +28,6 @@ const AddAssetItem = ({
   ...inputProps
 }: AddAssetItemProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setAssetForm((prev) => ({
       ...prev,
       [target]: e.target.value,
@@ -38,7 +37,7 @@ const AddAssetItem = ({
       setAssetForm((prev) => {
         return {
           ...prev,
-          principalPrice: prev.quantity * prev.averagePrice,
+          principal: prev.quantity * prev.averagePrice,
         };
       });
     }

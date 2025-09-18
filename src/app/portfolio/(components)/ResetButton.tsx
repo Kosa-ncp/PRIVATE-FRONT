@@ -1,26 +1,13 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { AssetFormData } from "./AddAssetForm";
+import React from "react";
 
 interface ResetButtonProps {
-  setAssetForm: Dispatch<SetStateAction<AssetFormData>>;
+  handleReset: () => void;
 }
 
-const ResetButton = ({ setAssetForm }: ResetButtonProps) => {
+const ResetButton = ({ handleReset }: ResetButtonProps) => {
   return (
     <button
-      onClick={() =>
-        setAssetForm((prev) => {
-          return {
-            assetType: prev.assetType,
-            purchasePrice: null,
-            averagePrice: null,
-            assetName: "",
-            quantity: null,
-            annualInterestRate: null,
-            principalPrice: null,
-          };
-        })
-      }
+      onClick={handleReset}
       className="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors">
       초기화
     </button>

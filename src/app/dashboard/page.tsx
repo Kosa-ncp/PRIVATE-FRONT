@@ -8,9 +8,9 @@ import ReportContainer from "./(components)/ReportContainer";
 import LoadingSpinner from "./(components)/LoadingSpinner";
 
 const Page = () => {
-  const { data, isLoading } = useGetDashboard();
+  const { data, isLoading, isRefetching } = useGetDashboard();
 
-  if (isLoading) {
+  if (isLoading || isRefetching) {
     return (
       <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
         <div className="bg-gray-800 rounded-lg p-8 shadow-2xl border border-gray-700">

@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { useAssetStore } from "../../../../stores/asserStore";
+import useAssetStore from "../../../../stores/asserStore";
 import { useAsset } from "../../../../hooks/useAsset";
 import { Minus } from "lucide-react";
 import useDeletePortfolio from "../../../../hooks/useDeletePortfolio";
+import { useRouter } from "next/navigation";
 
 interface DeleteAssetFormProps {
   onToggleModal: () => void;
@@ -13,11 +14,16 @@ interface DeleteAssetFormProps {
 const DeleteAssetForm = ({ onToggleModal }: DeleteAssetFormProps) => {
   const { selectedAssetId } = useAssetStore();
   const { data } = useAsset(selectedAssetId);
-  const { mutate } = useDeletePortfolio();
+  const { mutateAsync } = useDeletePortfolio();
+  const navigation = useRouter();
 
-  const handleDeleteAsset = () => {
-    mutate(data.assetId);
-    onToggleModal();
+  const handleDeleteAsset = async () => {
+    try {
+      await mutateAsync(data.assetId);
+      onToggleModal();
+    } catch (error) {
+      navigation.push("/");
+    }
   };
 
   const handleCancelDelete = () => {

@@ -4,16 +4,17 @@ import getDashboardList from "../utils/getDashboardList";
 const useGetDashboard = () => {
   const queryKey = ["dashboard"];
   const queryConfig = {
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: "always" as const,
+    refetchOnMount: "always" as const,
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, isRefetching, error } = useQuery({
     ...queryConfig,
     queryKey,
     queryFn: getDashboardList,
   });
 
-  return { data, isLoading, error };
+  return { data, isLoading, isRefetching, error };
 };
 
 export { useGetDashboard };

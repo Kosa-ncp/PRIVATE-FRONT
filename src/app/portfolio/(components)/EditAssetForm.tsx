@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAssetStore } from "../../../../stores/asserStore";
+import useAssetStore from "../../../../stores/asserStore";
 import { useAsset } from "../../../../hooks/useAsset";
 import { Plus, Shield } from "lucide-react";
 import ResetButton from "./ResetButton";
 import AddAssetItem from "./AddAssetItem";
+import { useRouter } from "next/navigation";
+import useEditPortfolio from "../../../../hooks/useEditPortfolio";
 
 export interface AssetEditFormData {
   assetType: string;
@@ -21,9 +23,11 @@ interface EditAssetFormProps {
 }
 
 const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
+  const navigation = useRouter();
+  const { mutateAsync } = useEditPortfolio();
   const { selectedAssetId } = useAssetStore();
   const { data } = useAsset(selectedAssetId);
-  const [assets, setAssetForm] = useState<AssetEditFormData>({
+  const [assetForm, setAssetForm] = useState<AssetEditFormData>({
     assetType: data.assetType,
     averagePrice: null,
     assetName: data.assetName,
@@ -54,13 +58,18 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
     });
   };
 
-  const handleEditAsset = () => {
-    onToggleModal();
+  const handleEditAsset = async () => {
+    try {
+      await mutateAsync(assetForm);
+      onToggleModal();
+    } catch (error) {
+      navigation.push("/");
+    }
   };
 
   useEffect(() => {
-    setAssetForm(assets);
-  }, [assets, data]);
+    setAssetForm(assetForm);
+  }, [assetForm, data]);
 
   return (
     <div className="space-y-6">
@@ -71,12 +80,12 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
         </h3>
         <div className="flex justify-end gap-4 mb-4">
           <button
-            className={`${assets.orderType === "BUY" ? "bg-green-600" : "bg-green-800"} hover:bg-green-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200`}
+            className={`${assetForm.orderType === "BUY" ? "bg-green-600" : "bg-green-800"} hover:bg-green-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200`}
             onClick={() => handleOrderType("BUY")}>
             매수
           </button>
           <button
-            className={`${assets.orderType === "SELL" ? "bg-red-600" : "bg-red-800"} hover:bg-red-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200`}
+            className={`${assetForm.orderType === "SELL" ? "bg-red-600" : "bg-red-800"} hover:bg-red-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200`}
             onClick={() => handleOrderType("SELL")}>
             매도
           </button>
@@ -87,7 +96,7 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
               자산 유형 *
             </label>
             <select
-              value={assets.assetType}
+              value={assetForm.assetType}
               onChange={(e) =>
                 setAssetForm((prev) => ({
                   ...prev,
@@ -103,16 +112,16 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
               <option>현금</option>
             </select>
           </div>
-          {assets.assetType === "국내주식" ||
-          assets.assetType === "해외주식" ||
-          assets.assetType === "가상자산" ? (
+          {assetForm.assetType === "국내주식" ||
+          assetForm.assetType === "해외주식" ||
+          assetForm.assetType === "가상자산" ? (
             <>
               <AddAssetItem
                 title="자산명 *"
                 type="text"
                 target="assetName"
                 setAssetForm={setAssetForm}
-                value={assets.assetName}
+                value={assetForm.assetName}
                 placeholder="예: 삼성전자, 애플 주식"
                 disabled
               />
@@ -121,7 +130,7 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
                 type="number"
                 target="averagePrice"
                 setAssetForm={setAssetForm}
-                value={assets.averagePrice}
+                value={assetForm.averagePrice}
                 placeholder="원"
               />
               <AddAssetItem
@@ -129,7 +138,7 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
                 type="number"
                 target="quantity"
                 setAssetForm={setAssetForm}
-                value={assets.quantity}
+                value={assetForm.quantity}
                 placeholder="개"
               />
               <AddAssetItem
@@ -137,7 +146,7 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
                 type="number"
                 target="principal"
                 setAssetForm={setAssetForm}
-                value={assets.principal}
+                value={assetForm.principal}
                 placeholder="원"
                 disabled
               />
@@ -149,15 +158,15 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
                 type="text"
                 target="assetName"
                 setAssetForm={setAssetForm}
-                value={assets.assetName}
+                value={assetForm.assetName}
                 placeholder="예: 삼성전자, 애플 주식"
               />
               <AddAssetItem
-                title={assets.assetType === "현금" ? "현금 *" : "원금 *"}
+                title={assetForm.assetType === "현금" ? "현금 *" : "원금 *"}
                 type="number"
                 target="principal"
                 setAssetForm={setAssetForm}
-                value={assets.principal}
+                value={assetForm.principal}
                 placeholder="원"
               />
             </>

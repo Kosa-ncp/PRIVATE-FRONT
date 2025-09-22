@@ -1,16 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DeletePortfolioResponseDataType } from "../utils/utilsTypes";
-import deletePortfolio from "../utils/deletePortfolio";
+import { editPortfolioResponseDataType } from "../utils/utilsTypes";
+import editPortfolio from "../utils/editPortfolio";
+import { AssetEditFormData } from "@/app/portfolio/(components)/EditAssetForm";
 
-const useDeletePortfolio = () => {
+const useEditPortfolio = () => {
   const queryClient = useQueryClient();
 
   const { mutate, mutateAsync, isPending, error } = useMutation<
-    DeletePortfolioResponseDataType,
+    editPortfolioResponseDataType,
     Error,
-    string
+    AssetEditFormData
   >({
-    mutationFn: deletePortfolio,
+    mutationFn: editPortfolio,
 
     onSuccess: async () => {
       await Promise.all([
@@ -20,11 +21,11 @@ const useDeletePortfolio = () => {
     },
 
     onError: (error) => {
-      console.error("자산 삭제 실패:", error);
+      console.error("자산 수정 실패:", error);
     },
   });
 
   return { mutate, mutateAsync, isPending, error };
 };
 
-export default useDeletePortfolio;
+export default useEditPortfolio;

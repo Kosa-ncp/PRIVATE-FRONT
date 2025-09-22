@@ -2,8 +2,8 @@ export interface Instance {
   (url: string, option?: InstanceOption): Promise<Response>;
 }
 
-interface InstanceOption {
-  method: "GET" | "POST" | "PUT" | "DELETE";
+interface InstanceOption extends RequestInit {
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: BodyInit;
 }
 
@@ -58,6 +58,24 @@ export interface addPortfolioResponseDataType {
 export interface addPortfolioResponseTypes {
   status: string;
   data: addPortfolioResponseDataType[];
+}
+
+export interface editPortfolioResponseDataType {
+  assetId: string;
+  assetName: string;
+  assetType: string;
+  quantity: number;
+  currentPrice: number;
+  valuation: number;
+  averagePrice: number;
+  principal: number;
+  profit: number;
+  profitRate: number;
+}
+
+export interface editPortfolioResponseTypes {
+  status: string;
+  data: editPortfolioResponseDataType[];
 }
 
 export interface DeletePortfolioResponseDataType {

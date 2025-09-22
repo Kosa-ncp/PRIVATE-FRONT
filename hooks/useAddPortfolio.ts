@@ -6,7 +6,7 @@ import { addPortfolioResponseDataType } from "../utils/utilsTypes";
 const useAddPortfolio = () => {
   const queryClient = useQueryClient();
 
-  const { mutate, isPending, error } = useMutation<
+  const { mutate, mutateAsync, isPending, error } = useMutation<
     addPortfolioResponseDataType,
     Error,
     AssetFormData
@@ -25,7 +25,7 @@ const useAddPortfolio = () => {
     },
   });
 
-  return { mutate, isPending, error };
+  return { mutate, mutateAsync, isPending, error };
 };
 
 export default useAddPortfolio;

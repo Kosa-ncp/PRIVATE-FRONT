@@ -5,6 +5,7 @@ import { useState } from "react";
 import ResetButton from "./ResetButton";
 import AddAssetItem from "./AddAssetItem";
 import useAddPortfolio from "../../../../hooks/useAddPortfolio";
+import { useRouter } from "next/navigation";
 
 export interface AssetFormData {
   assetType: string;
@@ -19,7 +20,8 @@ interface AddAssetFormProps {
 }
 
 const AddAssetForm = ({ onToggleModal }: AddAssetFormProps) => {
-  const { mutate } = useAddPortfolio();
+  const { mutateAsync } = useAddPortfolio();
+  const navigation = useRouter();
   const [assetForm, setAssetForm] = useState<AssetFormData>({
     assetType: "국내주식",
     averagePrice: null,
@@ -40,10 +42,13 @@ const AddAssetForm = ({ onToggleModal }: AddAssetFormProps) => {
     });
   };
 
-  const handleAddAsset = () => {
-    mutate(assetForm);
-    console.log(assetForm);
-    onToggleModal();
+  const handleAddAsset = async () => {
+    try {
+      await mutateAsync(assetForm);
+      onToggleModal();
+    } catch (error) {
+      navigation.push("/");
+    }
   };
 
   return (

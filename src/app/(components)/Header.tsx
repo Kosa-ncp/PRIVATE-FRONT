@@ -1,5 +1,7 @@
+"use client";
 import { Shield } from "lucide-react";
 import React from "react";
+import Logout from "./Logout";
 
 const Header = () => {
   return (
@@ -15,6 +17,7 @@ const Header = () => {
               AI 포트폴리오 관리
             </span>
           </div>
+          <Logout />
         </div>
       </div>
     </header>

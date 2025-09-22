@@ -1,17 +1,22 @@
 import { Instance } from "./utilsTypes";
 
-const API_SERVER = "http://223.130.151.167:8100";
-
 const instance: Instance = async (url, option) => {
-  const res = await fetch(`${API_SERVER}${url}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer 1234",
-    },
-    ...option,
-  });
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      ...option,
+    });
 
-  return res;
+    if (!res.ok) {
+      throw new Error("Internal Server Error");
+    }
+
+    return res;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default instance;

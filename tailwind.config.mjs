@@ -10,11 +10,16 @@ export default {
         "spin-slow": "spin 3s linear infinite",
         "bounce-slow": "bounce 2s infinite",
         "gradient-shift": "gradient-shift 3s ease-in-out infinite",
+        glow: "glow 2s ease-in-out infinite alternate",
       },
       keyframes: {
         "gradient-shift": {
           "0%, 100%": { "background-position": "0% 50%" },
           "50%": { "background-position": "100% 50%" },
+        },
+        glow: {
+          "0%": { opacity: "0.2" },
+          "100%": { opacity: "0.3" },
         },
       },
     },

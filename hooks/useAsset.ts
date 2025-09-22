@@ -1,4 +1,4 @@
-import { useAssetStore } from "../stores/asserStore";
+import useAssetStore from "../stores/asserStore";
 
 export const useAsset = (assetId: string) => {
   const getAssetById = useAssetStore((state) => state.getAssetById);

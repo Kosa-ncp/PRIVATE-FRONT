@@ -7,7 +7,7 @@ import AssetList from "./(components)/AssetList";
 import ModalManager, { currentModal } from "./(components)/ModalManager";
 import { useGetPortfolio } from "../../../hooks/useGetPortfolio";
 import LoadingSpinner from "../dashboard/(components)/LoadingSpinner";
-import { useAssetStore } from "../../../stores/asserStore";
+import useAssetStore from "../../../stores/asserStore";
 
 const Page = () => {
   const [modalData, setModalData] = useState<{
@@ -15,7 +15,7 @@ const Page = () => {
     currentModal: currentModal;
   }>({ isOpen: false, currentModal: "" });
 
-  const { data, isLoading } = useGetPortfolio();
+  const { data, isLoading, isRefetching, isFetching } = useGetPortfolio();
   const { setSelectedAssetId } = useAssetStore();
 
   const handleModal = (target: currentModal) => {
@@ -72,7 +72,7 @@ const Page = () => {
 
   const portfolioData = calculatePortfolioData();
 
-  if (isLoading) {
+  if (isLoading || isRefetching) {
     return (
       <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
         <div className="bg-gray-800 rounded-lg p-8 shadow-2xl border border-gray-700">
@@ -119,7 +119,16 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
+      <div className="bg-gray-800 p-6 rounded-xl shadow-lg relative">
+        {isFetching && (
+          <div className="absolute rounded-lg inset-0 bg-gray-900/80 backdrop-blur-sm w-full h-full flex justify-center items-center">
+            <LoadingSpinner
+              size="lg"
+              variant="gradient"
+              text="데이터를 불러오는 중..."
+            />
+          </div>
+        )}
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-white">보유 자산 목록</h3>
           <div className="flex justify-between gap-4">
@@ -135,7 +144,6 @@ const Page = () => {
             </button> */}
           </div>
         </div>
-
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

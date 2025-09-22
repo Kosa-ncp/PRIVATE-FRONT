@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import useEditPortfolio from "../../../../hooks/useEditPortfolio";
 
 export interface AssetEditFormData {
+  assetId?: string;
   assetType: string;
   averagePrice: number;
   assetName: string;
@@ -28,6 +29,7 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
   const { selectedAssetId } = useAssetStore();
   const { data } = useAsset(selectedAssetId);
   const [assetForm, setAssetForm] = useState<AssetEditFormData>({
+    assetId: data.assetId,
     assetType: data.assetType,
     averagePrice: null,
     assetName: data.assetName,
@@ -39,6 +41,7 @@ const EditAssetForm = ({ onToggleModal }: EditAssetFormProps) => {
   const handleReset = () => {
     setAssetForm((prev) => {
       return {
+        assetId: data.assetId,
         assetType: prev.assetType,
         averagePrice: null,
         assetName: prev.assetName,

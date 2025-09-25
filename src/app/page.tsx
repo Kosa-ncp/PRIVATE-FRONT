@@ -1,12 +1,10 @@
 "use client";
 
 import React, { ChangeEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 import useUserStore from "../../stores/userStore";
 
 const Page = () => {
   const [user, serUser] = useState<string>("");
-  const navigation = useRouter();
   const { login } = useUserStore();
   const handleUserData = (e: ChangeEvent<HTMLInputElement>) => {
     serUser(e.target.value);
@@ -16,8 +14,7 @@ const Page = () => {
     await login(user);
 
     await new Promise((resolve) => {
-      console.log("네비게이션 시작");
-      navigation.push("/dashboard");
+      window.location.replace("/dashboard");
 
       const checkURL = () => {
         console.log("현재 경로 확인 중:", window.location.pathname);

@@ -17,13 +17,9 @@ const Page = () => {
       window.location.replace("/dashboard");
 
       const checkURL = () => {
-        console.log("현재 경로 확인 중:", window.location.pathname);
-
         if (window.location.pathname === "/dashboard") {
-          console.log("리다이렉트 성공");
           resolve(void 0);
         } else {
-          console.log("대기 중...");
           setTimeout(checkURL, 100);
         }
       };

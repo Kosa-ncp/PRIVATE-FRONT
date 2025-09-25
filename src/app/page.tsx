@@ -1,21 +1,26 @@
 "use client";
 
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useUserStore from "../../stores/userStore";
 
 const Page = () => {
   const [user, serUser] = useState<string>("");
   const navigation = useRouter();
-  const { login } = useUserStore();
+  const { login, isLogin } = useUserStore();
   const handleUserData = (e: ChangeEvent<HTMLInputElement>) => {
     serUser(e.target.value);
   };
 
   const handleLogin = async () => {
     await login(user);
-    navigation.push("/dashboard");
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      navigation.push("/dashboard");
+    }
+  }, [isLogin, navigation]);
 
   return (
     <div className=" absolute inset-0 min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">

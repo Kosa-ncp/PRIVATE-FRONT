@@ -13,12 +13,20 @@ const Page = () => {
   };
 
   const handleLogin = async () => {
-    await login(user);
+    login(user);
   };
 
   useEffect(() => {
     if (isLogin) {
-      navigation.push("/dashboard");
+      console.log("Redirecting to /dashboard...");
+      const redirectTimer = setTimeout(
+        () => {
+          navigation.push("/dashboard");
+        },
+        process.env.NODE_ENV === "production" ? 300 : 0
+      );
+
+      return () => clearTimeout(redirectTimer);
     }
   }, [isLogin, navigation]);
 

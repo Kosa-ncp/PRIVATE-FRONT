@@ -6,7 +6,7 @@ import login from "../utils/login";
 interface userInfoProps {
   isLogin: boolean;
   checkLogin: () => void;
-  login: (uuid: string) => void;
+  login: (uuid: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -17,6 +17,8 @@ const useUserStore = create<userInfoProps>((set) => {
     login: async (uuid: string) => {
       await login(uuid);
       set({ isLogin: true });
+
+      return true;
     },
 
     checkLogin: async () => {

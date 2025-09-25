@@ -1,34 +1,33 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import useUserStore from "../../stores/userStore";
 
 const Page = () => {
   const [user, serUser] = useState<string>("");
   const navigation = useRouter();
-  const { login, isLogin } = useUserStore();
+  const { login } = useUserStore();
   const handleUserData = (e: ChangeEvent<HTMLInputElement>) => {
     serUser(e.target.value);
   };
 
   const handleLogin = async () => {
-    login(user);
+    await login(user);
+
+    navigation.push("/dashboard");
+
+    await new Promise((resolve) => {
+      const checkURL = () => {
+        if (window.location.pathname === "/dashboard") {
+          resolve(void 0);
+        } else {
+          setTimeout(checkURL, 50);
+        }
+      };
+      checkURL();
+    });
   };
-
-  useEffect(() => {
-    if (isLogin) {
-      const redirectTimer = setTimeout(
-        () => {
-          navigation.push("/dashboard");
-          console.log("Redirecting to /dashboard...");
-        },
-        process.env.NODE_ENV === "production" ? 300 : 0
-      );
-
-      return () => clearTimeout(redirectTimer);
-    }
-  }, [isLogin, navigation]);
 
   return (
     <div className=" absolute inset-0 min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">

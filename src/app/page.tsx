@@ -15,17 +15,22 @@ const Page = () => {
   const handleLogin = async () => {
     await login(user);
 
-    navigation.push("/dashboard");
-
     await new Promise((resolve) => {
+      console.log("네비게이션 시작");
+      navigation.push("/dashboard");
+
       const checkURL = () => {
+        console.log("현재 경로 확인 중:", window.location.pathname);
+
         if (window.location.pathname === "/dashboard") {
+          console.log("리다이렉트 성공");
           resolve(void 0);
         } else {
-          setTimeout(checkURL, 50);
+          console.log("대기 중...");
+          setTimeout(checkURL, 100);
         }
       };
-      checkURL();
+      setTimeout(checkURL, 50);
     });
   };
 

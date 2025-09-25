@@ -18,10 +18,10 @@ const Page = () => {
 
   useEffect(() => {
     if (isLogin) {
-      console.log("Redirecting to /dashboard...");
       const redirectTimer = setTimeout(
         () => {
           navigation.push("/dashboard");
+          console.log("Redirecting to /dashboard...");
         },
         process.env.NODE_ENV === "production" ? 300 : 0
       );

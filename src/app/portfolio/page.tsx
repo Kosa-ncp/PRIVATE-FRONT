@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import ChartConatainer from "./(components)/ChartConatainer";
 import AssetList from "./(components)/AssetList";
@@ -44,7 +44,7 @@ const Page = () => {
     const typeGroups = data.reduce(
       (acc: Record<string, number>, asset) => {
         if (!acc[asset.assetType]) acc[asset.assetType] = 0;
-        acc[asset.assetType] += asset.currentPrice;
+        acc[asset.assetType] += asset.valuation;
         return acc;
       },
       {} as Record<string, number>
@@ -138,24 +138,25 @@ const Page = () => {
               <Plus className="w-4 h-4" />
               <span>추가하기</span>
             </button>
-            {/* <button className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
-              <Download className="w-4 h-4" />
-              <span>내보내기</span>
-            </button> */}
           </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-700">
-                <th className="text-left py-3 px-4 text-gray-300">자산명</th>
-                <th className="text-left py-3 px-4 text-gray-300">유형</th>
-                <th className="text-right py-3 px-4 text-gray-300">평가금액</th>
-                <th className="text-right py-3 px-4 text-gray-300">평단가</th>
-                <th className="text-right py-3 px-4 text-gray-300">수량</th>
-                <th className="text-right py-3 px-4 text-gray-300">매입금액</th>
-                <th className="text-right py-3 px-4 text-gray-300">손익</th>
-                <th className="text-right py-3 px-4 text-gray-300">수익률</th>
+                <th className="text-center py-3 px-4 text-gray-300">자산명</th>
+                <th className="text-center py-3 px-4 text-gray-300">유형</th>
+                <th className="text-center py-3 px-4 text-gray-300">
+                  평가금액
+                </th>
+                <th className="text-center py-3 px-4 text-gray-300">현재가</th>
+                <th className="text-center py-3 px-4 text-gray-300">평단가</th>
+                <th className="text-center py-3 px-4 text-gray-300">수량</th>
+                <th className="text-center py-3 px-4 text-gray-300">
+                  매입금액
+                </th>
+                <th className="text-center py-3 px-4 text-gray-300">손익</th>
+                <th className="text-center py-3 px-4 text-gray-300">수익률</th>
                 <th className="text-center py-3 px-4 text-gray-300">관리</th>
               </tr>
             </thead>

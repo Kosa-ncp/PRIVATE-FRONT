@@ -6,6 +6,12 @@ import ResetButton from "./ResetButton";
 import AddAssetItem from "./AddAssetItem";
 import useAddPortfolio from "../../../../hooks/useAddPortfolio";
 import { useRouter } from "next/navigation";
+import {
+  AuthError,
+  NetworkError,
+  ServerError,
+  ValidationError,
+} from "../../../../utils/errorHandling";
 
 export interface AssetFormData {
   assetType: string;
@@ -46,8 +52,21 @@ const AddAssetForm = ({ onToggleModal }: AddAssetFormProps) => {
     try {
       await mutateAsync(assetForm);
       onToggleModal();
-    } catch (error) {
-      navigation.push("/");
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) {
+        alert("입력한 정보를 다시 확인해주세요");
+      } else if (error instanceof AuthError) {
+        if (error.status === 401) {
+          alert("로그인이 필요합니다");
+          navigation.push("/");
+        } else if (error.status === 403) {
+          alert("접근 권한이 없습니다");
+        }
+      } else if (error instanceof NetworkError) {
+        alert("네트워크 연결을 확인해주세요");
+      } else if (error instanceof ServerError) {
+        alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요");
+      }
     }
   };
 

@@ -17,6 +17,8 @@ const useGetPortfolio = () => {
     queryFn: getPortfolioList,
   });
 
+  console.log(data);
+
   useEffect(() => {
     if (data && data.status === "success") {
       setPortfolio(data.data);

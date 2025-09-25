@@ -1,5 +1,9 @@
 import { NextRequest } from "next/server";
 import getUser from "../../../../utils/getUser";
+import {
+  handleApiError,
+  handleCatchError,
+} from "../../../../utils/errorHandling";
 
 const API_BASE_URL = process.env.BACKEND_API_URL || "http://localhost:8100";
 
@@ -16,18 +20,13 @@ export async function GET(request: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error("Backend API 오류");
+      return await handleApiError(response);
     }
 
     const data = await response.json();
-
     return Response.json(data);
   } catch (error) {
-    console.log(error);
-    return Response.json(
-      { error: "서버 오류가 발생했습니다" },
-      { status: 500 }
-    );
+    return handleCatchError(error, "GET API Route");
   }
 }
 
@@ -47,11 +46,14 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     });
 
+    if (!response.ok) {
+      return await handleApiError(response);
+    }
+
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    console.log(error);
-    return Response.json({ error: "생성 실패" }, { status: 500 });
+    return handleCatchError(error, "POST API Route");
   }
 }
 
@@ -61,7 +63,6 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-
     console.log(body);
 
     const response = await fetch(`${API_BASE_URL}/api/portfolio`, {
@@ -74,28 +75,26 @@ export async function PATCH(request: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error("Backend API 오류");
+      return await handleApiError(response);
     }
 
     const data = await response.json();
-
     return Response.json(data);
   } catch (error) {
-    console.log(error);
-    return Response.json(
-      { error: "서버 오류가 발생했습니다" },
-      { status: 500 }
-    );
+    return handleCatchError(error, "PATCH API Route");
   }
 }
 
 export async function DELETE(request: NextRequest) {
   const token = getUser(request);
 
-  const { assetId } = await request.json();
-
   try {
-    if (!token) throw new Error("No token");
+    if (!token) {
+      return Response.json({ error: "인증 토큰이 없습니다" }, { status: 401 });
+    }
+
+    const { assetId } = await request.json();
+
     const response = await fetch(`${API_BASE_URL}/api/portfolio`, {
       method: "DELETE",
       headers: {
@@ -106,17 +105,12 @@ export async function DELETE(request: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error("Backend API 오류");
+      return await handleApiError(response);
     }
 
     const data = await response.json();
-
     return Response.json(data);
   } catch (error) {
-    console.log(error);
-    return Response.json(
-      { error: "서버 오류가 발생했습니다" },
-      { status: 500 }
-    );
+    return handleCatchError(error, "DELETE API Route");
   }
 }

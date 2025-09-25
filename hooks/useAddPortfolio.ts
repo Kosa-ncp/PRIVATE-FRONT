@@ -7,7 +7,7 @@ const useAddPortfolio = () => {
   const queryClient = useQueryClient();
 
   const { mutate, mutateAsync, isPending, error } = useMutation<
-    addPortfolioResponseDataType,
+    addPortfolioResponseDataType[],
     Error,
     AssetFormData
   >({
@@ -18,10 +18,6 @@ const useAddPortfolio = () => {
         queryClient.invalidateQueries({ queryKey: ["portfolio"] }),
         queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
       ]);
-    },
-
-    onError: (error) => {
-      console.error("자산 생성 실패:", error);
     },
   });
 

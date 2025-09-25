@@ -1,4 +1,3 @@
-// app/api/auth/me/route.ts
 import { NextResponse } from "next/server";
 import { getAuthTokens } from "../../../../../utils/cookies";
 import { verifyToken } from "../../../../../utils/jwt";

@@ -28,6 +28,9 @@ const AssetList = ({
               ₩{asset.valuation.toLocaleString()}
             </td>
             <td className="py-3 px-4 text-right text-white">
+              ₩{asset.currentPrice.toLocaleString()}
+            </td>
+            <td className="py-3 px-4 text-right text-white">
               ₩{asset.averagePrice.toLocaleString()}
             </td>
             <td className="py-3 px-4 text-right text-white">

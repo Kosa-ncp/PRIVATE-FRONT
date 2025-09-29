@@ -13,10 +13,6 @@ const useSendChatMessage = () => {
   >({
     mutationFn: sendChatMessage,
 
-    onSuccess: async (data) => {
-      console.log("챗봇 응답:", data.response);
-    },
-
     onError: (error) => {
       console.error("챗봇 메시지 전송 실패:", error);
     },

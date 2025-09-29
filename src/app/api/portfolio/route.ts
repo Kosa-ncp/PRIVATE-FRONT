@@ -63,7 +63,6 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    console.log(body);
 
     const response = await fetch(`${API_BASE_URL}/api/portfolio`, {
       method: "PATCH",

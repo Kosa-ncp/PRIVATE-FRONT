@@ -10,8 +10,6 @@ export const POST = async (request: NextRequest) => {
 
     await setAuthCookies({ accessToken: token });
 
-    console.log("login success:", uuid);
-
     return NextResponse.json({
       status: "success",
     });
